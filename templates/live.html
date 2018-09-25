@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>Live Streaming</title>
+        <link rel="shortcut icon" href="" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+        <script src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/popper.min.js') }}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+        <style media="screen">
+          .message{
+            width: 100%;
+            border: 1px solid #34909ee6;
+            height: 10%;
+            -webkit-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+            -moz-box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+            box-shadow: -1px 2px 36px 3px rgba(67,117,114,0.69);
+          }
+          .messcards
+          {
+            width: 100%;
+            height: 80%;
+            text-align: center;
+          }
+          .card
+          {
+            background-color: #58d0bf45;
+          }
+          .messcards .col-12{
+            padding:5px;
+          }
+        </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header" align="center">
+			<h1>Live Stream</h1>
+		</div>
+    <div class="messcards">
+
+    </div>
+    <div class="message row">
+      <div class="col-10" style="padding:6px 6px;">
+        <input class="form-control form-control-lg" type="text" placeholder="Enter Message" style="border-radius:20px;">
+      </div>
+      <div class="col-2" align="center" style="padding:10px 0px;">
+        <button class="btn btn-primary" id="submit" type="submit" style="width:120px;"><i class="fa fa-paper-plane" aria-hidden="true" style="font-size:30px;"></i></button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script type="text/javascript">
+  var source = new EventSource("/live-data");
+  source.onmessage = function(event) {
+    console.log(event);
+    data = event.data;
+    $(".messcards").append('<div class="col-12"><div class="card">\
+      <div class="card-body">\
+        '+data+'\
+      </div>\
+    </div></div>');
+  };
+  $("#submit").click(function(){
+    $.get('/save_data',{'data':$("input[type=text]").val()})
+    .done(function(data){
+      console.log(data);
+    })
+  })
+  </script>
+</body>
+</html>
